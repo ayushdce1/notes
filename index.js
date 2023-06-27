@@ -19,7 +19,7 @@ var notes_title = document.getElementById("notes_title");
 var notes_desc = document.getElementById("notes_desc");
 
 save_note.addEventListener("click",()=>{
-    console.log(notes_title.value);
+    //console.log(notes_title.value);
     if(notes_title.value =="" || notes_desc.value ==""){
         alert("Enter in both the fields");
     }else{
@@ -120,6 +120,146 @@ reset_note.addEventListener("click",()=>{
 
 // delete starts
 demo_data.addEventListener("click",()=>{
+    
+    delete_data();
+
+})
+// delete ends
+
+
+// edit & read more for demo data button starts
+demo_data.addEventListener("click",()=>{
+    
+    for_editing();
+
+    read_more();
+    
+})
+
+// edit & read more for demo data button ends
+
+// edit & read more for save button starts
+var save_note = document.getElementById("save_note");
+save_note.addEventListener("click",()=>{
+    
+    for_editing();
+
+    read_more();
+
+    delete_data();
+    
+})
+
+// edit & read more for save button ends
+
+function for_editing(){
+
+    var edit_note = document.getElementsByClassName("edit");
+    var edit_note_i;
+
+    for(edit_note_i=0;edit_note_i<edit_note.length;edit_note_i++){
+
+        edit_note[edit_note_i].addEventListener("click",(e)=>{
+          
+            var current_edit_button = e.currentTarget;
+
+            document.getElementsByClassName("edit_popup")[0].classList.add("display_popup");
+            
+            document.getElementsByClassName("notes_wrap")[0].classList.add("filter_bg");
+
+            var data_captured = e.target.closest(".notes_col_wrap").getElementsByClassName("notes_col_desc")[0].getElementsByTagName("p")[0].innerHTML;
+            var popup_content = document.getElementsByClassName("popup_content")[0].getElementsByTagName("textarea")[0];
+            popup_content.value = data_captured;
+            popup_content.focus();
+
+            document.addEventListener("click",(event)=>{
+
+                if(event.target.classList.contains("cross_button") || event.target.closest(".cross_button")){
+                    document.getElementsByClassName("edit_popup")[0].classList.remove("display_popup");
+            
+                    document.getElementsByClassName("notes_wrap")[0].classList.remove("filter_bg");
+
+                
+
+                }else if(event.target.closest(".edit_popup") || event.target.classList.contains("edit") || event.target.closest(".notes_col_readmore")){
+                 
+                    if(event.target.closest(".eraser")){
+                        popup_content.value = "";
+                    }else if(event.target.closest(".save")){
+
+                       
+                        current_edit_button.closest(".notes_col_wrap").getElementsByClassName("notes_col_desc")[0].getElementsByTagName("p")[0].innerHTML = popup_content.value;
+
+                        document.getElementsByClassName("edit_popup")[0].classList.remove("display_popup");
+            
+                        document.getElementsByClassName("notes_wrap")[0].classList.remove("filter_bg");
+                    }
+
+                }else{
+                    document.getElementsByClassName("edit_popup")[0].classList.remove("display_popup");
+            
+                    document.getElementsByClassName("notes_wrap")[0].classList.remove("filter_bg");
+                    
+                    
+                }
+            })
+
+        })
+    }
+
+}
+
+function read_more(){
+    var read_more = document.getElementsByClassName("notes_col_readmore");
+    var read_more_i;
+
+    for(read_more_i=0;read_more_i<read_more.length;read_more_i++){
+
+        read_more[read_more_i].addEventListener("click",(e)=>{
+            
+          
+
+            document.getElementsByClassName("edit_popup")[0].classList.add("display_popup");
+            
+            document.getElementsByClassName("notes_wrap")[0].classList.add("filter_bg");
+
+            var data_captured = e.target.closest(".notes_col_wrap").getElementsByClassName("notes_col_desc")[0].getElementsByTagName("p")[0].innerHTML;
+            var popup_content = document.getElementsByClassName("popup_content")[0].getElementsByTagName("textarea")[0];
+            popup_content.value = data_captured;
+            popup_content.setAttribute("disabled","true");
+            document.getElementsByClassName("edit_toolbar")[0].classList.add("display_none");
+
+            document.addEventListener("click",(event)=>{
+               // console.log(event.target.closest(".notes_col_readmore"),"closest");
+
+                if(event.target.classList.contains("cross_button") || event.target.closest(".cross_button")){
+                    document.getElementsByClassName("edit_popup")[0].classList.remove("display_popup");
+            
+                    document.getElementsByClassName("notes_wrap")[0].classList.remove("filter_bg");
+
+                    popup_content.removeAttribute("disabled");
+                    document.getElementsByClassName("edit_toolbar")[0].classList.remove("display_none");
+                  
+
+                }else if(event.target.closest(".edit_popup") || event.target.closest(".notes_col_readmore") || event.target.classList.contains("edit")){
+                   
+                   
+
+                }else{
+                    document.getElementsByClassName("edit_popup")[0].classList.remove("display_popup");
+            
+                    document.getElementsByClassName("notes_wrap")[0].classList.remove("filter_bg");
+                    
+                    popup_content.removeAttribute("disabled");
+                    document.getElementsByClassName("edit_toolbar")[0].classList.remove("display_none");
+                }
+            })
+
+        })
+    }
+}
+
+function delete_data(){
     var delete_note = document.getElementsByClassName("delete_note");
     var delete_note_i;
 
@@ -131,23 +271,4 @@ demo_data.addEventListener("click",()=>{
 
         })
     }
-
-})
-// delete ends
-
-// delete starts
-demo_data.addEventListener("click",()=>{
-    var edit_note = document.getElementsByClassName("edit");
-    var edit_note_i;
-
-    for(edit_note_i=0;edit_note_i<edit_note.length;edit_note_i++){
-
-        edit_note[edit_note_i].addEventListener("click",(e)=>{
-
-            console.log(e.target.closest(".notes_col_wrap").getElementsByClassName("notes_col_desc")[0].getElementsByTagName("p")[0].innerHTML);
-
-        })
-    }
-
-})
-// delete ends
+}
